@@ -10,8 +10,9 @@ public class Main
 {
     public static void main (String[] args)
     {        
-	//Create new Main Menu object m
+	//Creates new menu object 
 	MainMenu mainMenu = new MainMenu ();
+	
 
 	
 	//Create new fractal object

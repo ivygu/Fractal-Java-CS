@@ -8,7 +8,6 @@ public class Fractal extends Frame
     {
 	super ("Fractal");      // Set the frame's name
 	setSize (400, 400);     // Set the frame's size
-	setBackground(Color.BLACK);
 	show ();                // Show the frame
     } // Constructor
     
