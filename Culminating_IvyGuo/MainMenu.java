@@ -15,7 +15,7 @@ public class MainMenu extends JFrame implements ActionListener
     private JPanel contentPanel;
 
     //Make new JButtons for menu
-    private  JButton[] menuButtons = {
+    private JButton[] menuButtons = {
 	new JButton ("Get Started"),
 	new JButton ("How It Works"),
 	new JButton ("Exit")
@@ -39,7 +39,7 @@ public class MainMenu extends JFrame implements ActionListener
 	//Make new JPanel Object with grid layout to hold title JLabel
 	contentPanel = new JPanel ();
 	contentPanel.setBorder (new EmptyBorder
-		(new Insets (50, 50, 50, 50)));
+		(new Insets (30, 30, 30, 30)));
 	contentPanel.setLayout (new GridLayout (5, 1, 0, 10));
 	contentPanel.setBackground (Style.FAINT);
 	contentPanel.add (title);
@@ -65,28 +65,26 @@ public class MainMenu extends JFrame implements ActionListener
 
     } // Constructor
 
-    
+
     public void actionPerformed (ActionEvent e)
     {
 	Object buttonObj = e.getSource ();
 
 	if (buttonObj == menuButtons [0])
 	{
-	    menuButtons [0].setText("Works");
+	    menuButtons [0].setText ("Works");
 
 	}
 	else if (buttonObj == menuButtons [1])
 	{
 	    //Recycles current frame to replace with choosen activity
-	    frame.dispose();
+	    frame.dispose ();
 	    Instructions instructions_page = new Instructions ();
 
 	}
 	else if (buttonObj == menuButtons [2])
 	{
-	    //label.setText ("It works");
-	    System.out.println ("Hello World!");
-
+	    frame.dispose();
 	}
 
     } //action onclick listener method for menu Jbuttons
