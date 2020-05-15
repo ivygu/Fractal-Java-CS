@@ -11,27 +11,47 @@ public class SurveyLayout
     //Fields of Survey Layout
     static JPanel panel;
 
-    public static JPanel makePanel (String question)
+    private String[] [] questionOptionsList = {
+	    {"How are you feeling today?",
+	    "Joyful, Content, Delighted",
+	    "Upset, Frustrated, Hallow",
+	    "Angry, Bitter, Annoyed"},
+
+	    {"How stressed do you feel?",
+	    "Very tranquil. Nothing is too stressful.",
+	    "A bit of stress, but tt's alright.",
+	    "Extremely stressed! My mind is all over the place."},
+
+	    {"Where would you want to take a walk?",
+	    "In the forest, home to ancient trees and mini shrubs.",
+	    "In the meadows, covered in blankets of wildflowers.",
+	    "In the city, surrounded by beautiful, modern architecture."}
+	};
+
+    public static JPanel makePanel (int questionIndex)
     {
 	//Make new JLabel for title
-	JLabel label = new JLabel (question , JLabel.CENTER);
-	label.setFont (Style.TITLE_FONT);
+	question = questionList [questionIndex][0];
+	JLabel label = new JLabel (question, JLabel.CENTER);
+	label.setFont (Style.HEADING_FONT);
 	label.setForeground (Style.DARK);
-	
-	//Make new JPanel Object with grid layout to hold title JLabel
-	panel = new JPanel ();
+
+	//Make new JPanel Object with grid layout
+	panel = new JPanel (new GridLayout (4, 1, 0, 10));
 	panel.setBorder (new EmptyBorder
 		(new Insets (30, 30, 30, 30)));
-	panel.setLayout (new GridLayout (3, 1, 0, 10));
 	panel.setBackground (Style.FAINT);
 	
+	for(int i = 1; i < 4; i++) {
+	    JLabel option = new JLabel(questionList[questionIndex][i]);
+	    
+	}
+
 	panel.add (label);
-	
+
 	return panel;
 
     } //makePanel Method
-
-
 } // SurveyLayout class
 
 
