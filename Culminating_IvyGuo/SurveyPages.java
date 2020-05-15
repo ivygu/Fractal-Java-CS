@@ -12,7 +12,14 @@ public class SurveyPages extends JFrame implements ActionListener
 {
     private JFrame frame;
     private JButton backButton, nextButton;
-    private JPanel mainPanel, cardPanel, buttonPanel, card1, card2;
+    private JPanel mainPanel, cardPanel, buttonPanel, card0;
+    private JPanel[] cardList = {
+	new JPanel (),
+	new JPanel (),
+	new JPanel (),
+	new JPanel ()
+	};
+
     private int currentView = 1;
 
     public SurveyPages ()
@@ -31,11 +38,17 @@ public class SurveyPages extends JFrame implements ActionListener
 	cardPanel = new JPanel (new CardLayout ());
 	mainPanel.add (cardPanel, BorderLayout.CENTER);
 
-	//Create survey pages (JPanels) for cardlayout
-	card1 = SurveyLayout.makePanel ("How are you feeling today?");
+	card0 = SurveyLayout.makePanel ("howdy", "yup");
+	cardPanel.add(card0, BorderLayout.CENTER);
 
+	//Create survey pages (JPanels) for cardlayout
+	for (int i = 0 ; i < 3 ; i++)
+	{
+	    cardList [i] = SurveyLayout.makePanel (i);
+	    //cardPanel.add (cardList [i], BorderLayout.CENTER);
+
+	}
 	//Add cards into main frame panel
-	cardPanel.add (card1, BorderLayout.CENTER);
 	//mainPanel.show(card1);
 
 
@@ -60,12 +73,20 @@ public class SurveyPages extends JFrame implements ActionListener
     public void actionPerformed (ActionEvent e)
     {
 	Object buttonObj = e.getSource ();
-	if (buttonObj == backButton)
+	if (buttonObj == backButton && currentView == 1)
 	{
+	    frame.dispose ();
+	    MainMenu mainMenu_page = new MainMenu ();
+ 
+	}
+	else if (buttonObj == backButton)
+	{
+	    currentView -= 1;
 
 	}
 	else if (buttonObj == nextButton)
 	{
+	    currentView += 1;
 	}
 
 
