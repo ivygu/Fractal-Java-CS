@@ -18,10 +18,13 @@ public class Instructions extends JFrame
 	frame = new JFrame ("Flavours of Fractals - How It Works");
 	
 	//Make new JLabel for title
-	title = SurveyLayout.makePanel("How It Works");
+	//JLabel title = new JLabel (question , JLabel.CENTER);
+	title = new JLabel("How It Works", JLabel.CENTER);
+	title.setFont (Style.TITLE_FONT);
+	title.setForeground (Style.DARK);
 	
 	//Make new Jlabel for description
-	description = new JLabel ("blahblahblahblah", JLabel.CENTER);
+	description = new JLabel ("hello", JLabel.CENTER);
 	description.setFont (Style.REGULAR_FONT);
 	description.setForeground (Style.SEMI);
 	

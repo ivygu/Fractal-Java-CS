@@ -72,7 +72,8 @@ public class MainMenu extends JFrame implements ActionListener
 
 	if (buttonObj == menuButtons [0])
 	{
-	    menuButtons [0].setText ("Works");
+	    frame.dispose ();
+	    SurveyPages survey_page = new SurveyPages ();
 
 	}
 	else if (buttonObj == menuButtons [1])
