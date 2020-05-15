@@ -1,19 +1,29 @@
 package Culminating_IvyGuo;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
-public class Fractal extends Frame
+public class Fractal extends JFrame
 {
+    JFrame frame;
     public Fractal ()
     {
-	super ("Fractal");      // Set the frame's name
-	setSize (400, 400);     // Set the frame's size
-	show ();                // Show the frame
+	frame = new JFrame ("Flavours of Fractals - Fractal Build");
+	
+	
+	
+	
+	// Set the frame's size and show the frame
+	frame.setSize (600, 500);
+	frame.setVisible (true);
+	
     } // Constructor
     
     public void paint (Graphics g)
     {
-	// Place the drawing code here
     } // paint method
     
 } // Fractal class
