@@ -36,7 +36,7 @@ public class SurveyPages extends JFrame implements ActionListener
 
 	};
 
-    private int[] userResponse = new int [3];
+    static int[] userResponse = new int [3];
     private JFrame frame;
     private JButton backButton, nextButton;
     private JPanel mainPanel, cardPanel, buttonPanel, card0, card1,
@@ -111,7 +111,6 @@ public class SurveyPages extends JFrame implements ActionListener
 	    cardPanel.add (cardList [i], "Card " + i);
 	}
 
-
 	//Create new panel for reusable buttons
 	buttonPanel = new JPanel ();
 	buttonPanel.setBorder (new EmptyBorder
@@ -160,4 +159,11 @@ public class SurveyPages extends JFrame implements ActionListener
 	    }
 	}
     } //On click button listener for next/back buttons
+
+
+    static int getSurveyAnswers(int a)
+    {
+	return userResponse [a];
+
+    }
 } // SurveyPages class

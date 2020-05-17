@@ -28,22 +28,10 @@ public class Style
 	LIME_GREEN = new Color (222, 255, 5),
 	AQUA = new Color (5, 255, 180);
 
-    final static Color[] coolColorList = {
-	MIDNIGHT_BLUE,
-	YALE_BLUE,
-	AERO_BLUE
-	};
-
-    final static Color[] warmColorList = {
-	SALSA_RED,
-	TULIP_PURPLE,
-	FLAME_ORANGE
-	};
-
-    final static Color[] energyColorList = {
-	GOLDEN_YELLOW,
-	LIME_GREEN,
-	AQUA
+    final static Color[] [] colorSchemeList = {
+	    {SALSA_RED, TULIP_PURPLE, FLAME_ORANGE},
+	    {MIDNIGHT_BLUE, YALE_BLUE, AERO_BLUE},
+	    {GOLDEN_YELLOW, LIME_GREEN, AQUA}
 	};
 
     final static Font
