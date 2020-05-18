@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import java.awt.geom.AffineTransform;
+
 
 public class Fractal extends Canvas
 {
@@ -16,20 +18,26 @@ public class Fractal extends Canvas
     int point1_x = 300, point1_y = 50;
     int point2_x = 100, point2_y = 400;
     int point3_x = 500, point3_y = 400;
+    int i = 10;
 
     //Starting points for base circle (x,y) & radius
     int center_x = 300, center_y = 250;
     int radius = 200;
 
+    //Starting points for trunk of tree (x,y)
+    int endPointA_x = 300, endPointA_y = 450;
+    int branchLength = 300;
+
     int limit;
 
+    //Frame to hold fractal drawings
     public Fractal ()
     {
 	frame = new JFrame ("Flavours of Fractals - Fractal Build");
 	canvas = new DrawingCanvas ();
 	frame.getContentPane ().add (canvas);
 	// Set the frame's size and show the frame
-	frame.setSize (600, 500);
+	frame.setSize (600, 550);
 	frame.setVisible (true);
 
     } // Constructor
@@ -46,12 +54,14 @@ public class Fractal extends Canvas
 	public void paint (Graphics g)
 	{
 	    super.paint (g);
-	    Graphics2D g2 = (Graphics2D) g;
+	    Graphics2D g2 = (Graphics2D) g; //for rotating graphics
+
 	    //Get survey response to customize fractals
 	    colourSchemeIndex = SurveyPages.getSurveyAnswers (0);
 	    complexityIndex = SurveyPages.getSurveyAnswers (1);
 	    shapeIndex = SurveyPages.getSurveyAnswers (2);
 
+	    //sets properties of fractals to use in fractal building methods
 	    switch (complexityIndex)
 	    {
 		case 0: //less stress == less crowded
@@ -59,23 +69,24 @@ public class Fractal extends Canvas
 		    break;
 
 		case 1: //some stress == a bit crowded
-		    limit = 6;
+		    limit = 5;
 		    break;
 
 		case 2: //a lot of stress == bery crowed
-		    limit = 7;
+		    limit = 6;
 		    break;
 	    }
 
 	    switch (shapeIndex)
 	    {
 		case 0: //trees--> organic + literal, trees
+		    drawLine (g, g2, colourSchemeIndex, endPointA_x,
+			    endPointA_y, branchLength, i);
 		    break;
 
 		case 1: //wildfires--> organic, circles
 		    fancyCircle (g, colourSchemeIndex, center_x, center_y,
 			    radius, limit);
-
 		    break;
 
 		case 2: //buildings --> more geometric, triangles
@@ -87,6 +98,8 @@ public class Fractal extends Canvas
 
 
 	} // paint method
+
+	//FRACTAL BUILDING METHODS-----------------------------------------
 
 	//Sierpinski Fractal ----------------------------------------------
 	public void drawTriangle (Graphics g, int colorIndex, int point1_x,
@@ -136,54 +149,107 @@ public class Fractal extends Canvas
 	//------------------------------------------------------------------
 
 	//Circle Fractal ---------------------------------------------------
-
 	public void drawCircle (Graphics g, int colorIndex, int center_x,
 		int center_y, int radius)
 	{
-
-	    g.setColor (Style.colorSchemeList [1] [0]);
-	    g.drawOval (center_x, center_y, radius, radius);
+	    g.setColor (Style.colorSchemeList [colorIndex] [0]);
+	    g.drawOval (center_x - radius / 2, center_y - radius / 2, radius,
+		    radius);
 	}
 
 	public void fancyCircle (Graphics g, int colorIndex, int center_x,
 		int center_y, int radius, int limit)
 	{
+	    drawCircle (g,
+		    colorIndex,
+		    center_x,
+		    center_y,
+		    radius);
+
+	    //Calls back to iself until level of complexity (limit) is met
 	    if (limit > 0)
 	    {
+		//Halves radius to create smaller surrounding circles
 		int newRadius = radius / 2;
 
+		//Calculates new orgin points for 4 new circles
 		int centerA_x = (center_x - radius / 2);
 		int centerB_x = (center_x + radius / 2);
 		int centerC_y = (center_y - radius / 2);
 		int centerD_y = (center_y + radius / 2);
 
-		 g.drawOval (
-			center_x - radius / 2,
-			center_y - radius / 2,
-			radius, radius
-			);
+		//Draws smaller circle to the left
+		fancyCircle (g,
+			colorIndex,
+			centerA_x,
+			center_y,
+			newRadius, limit - 1);
 
-		g.drawOval (
-			centerA_x - newRadius / 2,
-			center_y - newRadius / 2,
-			newRadius, newRadius);
+		//Draws smaller circle to the right
+		fancyCircle (g,
+			colorIndex,
+			centerB_x,
+			center_y,
+			newRadius, limit - 1);
 
-		g.drawOval (
-			centerB_x - newRadius / 2,
-			center_y - newRadius / 2,
-			newRadius, newRadius);
+		//Draws smaller circle bellow
+		fancyCircle (g,
+			colorIndex,
+			center_x,
+			centerC_y,
+			newRadius, limit - 1);
 
-		g.drawOval (
-			center_x - newRadius / 2,
-			centerC_y - newRadius / 2,
-			newRadius, newRadius);
-
-		g.drawOval (
-			center_x - newRadius / 2,
-			centerD_y - newRadius / 2,
-			newRadius, newRadius);
+		//Draws smaller circle above
+		fancyCircle (g,
+			colorIndex,
+			center_x,
+			centerD_y,
+			newRadius, limit - 1);
 	    }
+	}
+	//------------------------------------------------------------------
+
+	//Tree Fractal
+	public void drawLine (Graphics g, Graphics2D g2, int colorIndex,
+		int endPointA_x, int endPointA_y, int branchLength, int i)
+	{
+	    g.setColor (Style.colorSchemeList [colorIndex] [0]);
+	    AffineTransform old = g2.getTransform ();
+
+	    int newBranchLength = branchLength / 2;
+	    int endPointB_y = endPointA_y - newBranchLength;
+
+	    //middle branch of tree
+	    g.drawLine (endPointA_x, endPointA_y, endPointA_x, endPointB_y);
+
+	    //Left branch of tree + translate 45 degrees left
+	    g2.rotate (Math.toRadians (315), endPointA_x, endPointA_y);
+	    g.drawLine (endPointA_x, endPointA_y, endPointA_x, endPointB_y);
+
+	    //Reset angle back to 0 radians
+	    g2.rotate (Math.toRadians (-315), endPointA_x, endPointA_y);
+
+	    //Right Branch of tree + translate 45 degrees right
+	    g2.rotate (Math.toRadians (45), endPointA_x, endPointA_y);
+	    g.drawLine (endPointA_x, endPointA_y, endPointA_x, endPointB_y);
+
+	    //Stop rotations
+	    g2.setTransform (old);
+	    endPointA_y = endPointB_y;
+
+	    if (i >= 1)
+	    {
+		drawLine (g, g2, colourSchemeIndex,
+			endPointA_x, endPointA_y, newBranchLength, i -1);
+	    }
+	}
+
+	public void drawTree (Graphics g, Graphics2D g2, int colorIndex,
+		int endPointA_x, int endPointA_y, int branchLength)
+	{
 
 	}
+
+
     } // DrawingCanvas Class
 } // Fractal class
