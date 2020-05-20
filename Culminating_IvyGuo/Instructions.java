@@ -42,6 +42,7 @@ public class Instructions extends JFrame
 	
 	// Set the frame's size and show the frame
 	frame.setSize (600, 500);
+	frame.setResizable(false);
 	frame.setVisible (true);
     } // Constructor
 

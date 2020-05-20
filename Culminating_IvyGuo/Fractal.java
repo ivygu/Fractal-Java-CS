@@ -14,19 +14,23 @@ public class Fractal extends Canvas
     int colourSchemeIndex, complexityIndex, shapeIndex;
     DrawingCanvas canvas; //displays fractal patterns
 
+
     //Starting points for base triangle (x,y)
     int point1_x = 300, point1_y = 50;
     int point2_x = 100, point2_y = 400;
     int point3_x = 500, point3_y = 400;
-    int i = 10;
+    //int i = 10;
 
     //Starting points for base circle (x,y) & radius
-    int center_x = 300, center_y = 250;
+    int center_x = 300, center_y = 300;
     int radius = 200;
 
-    //Starting points for trunk of tree (x,y)
-    int endPointA_x = 300, endPointA_y = 450;
-    int branchLength = 300;
+    //Phyllotaxis spirals from flower seeds create the golden angle
+    //This is the angle at which one seed is placed relative to another (variation)
+    double goldenAngle = Math.toRadians (360 * Math.pow (((Math.sqrt (2) + 1) / 2), -2));
+    double c = 1.5; //scale factor for each row of petals/seeds
+    int spread = 2000; //Number of iterations of seeds/petals
+    int seedRadius = 5;
 
     int limit;
 
@@ -37,7 +41,8 @@ public class Fractal extends Canvas
 	canvas = new DrawingCanvas ();
 	frame.getContentPane ().add (canvas);
 	// Set the frame's size and show the frame
-	frame.setSize (600, 550);
+	frame.setSize (600, 600);
+	frame.setResizable (false);
 	frame.setVisible (true);
 
     } // Constructor
@@ -47,15 +52,17 @@ public class Fractal extends Canvas
     {
 	public DrawingCanvas ()
 	{
-	    this.setPreferredSize (new Dimension (600, 300));
-	    this.setBackground (Color.white);
+	    this.setPreferredSize (new Dimension (600, 600));
+	    this.setBackground (Color.yellow);
 	} //end constructor
 
 	public void paint (Graphics g)
 	{
 	    super.paint (g);
 	    Graphics2D g2 = (Graphics2D) g; //for rotating graphics
-
+	    int width = getWidth ();
+	    int height = getHeight ();
+	    
 	    //Get survey response to customize fractals
 	    colourSchemeIndex = SurveyPages.getSurveyAnswers (0);
 	    complexityIndex = SurveyPages.getSurveyAnswers (1);
@@ -80,8 +87,7 @@ public class Fractal extends Canvas
 	    switch (shapeIndex)
 	    {
 		case 0: //trees--> organic + literal, trees
-		    drawLine (g, g2, colourSchemeIndex, endPointA_x,
-			    endPointA_y, branchLength, i);
+		    multipleFlowers (g, g2, 0, 300, 300, width, height, seedRadius, 10);
 		    break;
 
 		case 1: //wildfires--> organic, circles
@@ -209,47 +215,132 @@ public class Fractal extends Canvas
 	}
 	//------------------------------------------------------------------
 
-	//Tree Fractal
-	public void drawLine (Graphics g, Graphics2D g2, int colorIndex,
-		int endPointA_x, int endPointA_y, int branchLength, int i)
+	//Flower/Seeds "fractal"
+
+   public void drawSeeds (Graphics g, Graphics2D g2, int colorIndex, int center_x,
+		int center_y, int width, int height, int radius)
 	{
-	    g.setColor (Style.colorSchemeList [colorIndex] [0]);
-	    AffineTransform old = g2.getTransform ();
+	    g.setColor (Color.black);
 
-	    int newBranchLength = branchLength / 2;
-	    int endPointB_y = endPointA_y - newBranchLength;
-
-	    //middle branch of tree
-	    g.drawLine (endPointA_x, endPointA_y, endPointA_x, endPointB_y);
-
-	    //Left branch of tree + translate 45 degrees left
-	    g2.rotate (Math.toRadians (315), endPointA_x, endPointA_y);
-	    g.drawLine (endPointA_x, endPointA_y, endPointA_x, endPointB_y);
-
-	    //Reset angle back to 0 radians
-	    g2.rotate (Math.toRadians (-315), endPointA_x, endPointA_y);
-
-	    //Right Branch of tree + translate 45 degrees right
-	    g2.rotate (Math.toRadians (45), endPointA_x, endPointA_y);
-	    g.drawLine (endPointA_x, endPointA_y, endPointA_x, endPointB_y);
-
-	    //Stop rotations
-	    g2.setTransform (old);
-	    endPointA_y = endPointB_y;
-
-	    if (i >= 1)
+	    for (int i = 0 ; i < spread ; i += 2)
 	    {
-		drawLine (g, g2, colourSchemeIndex,
-			endPointA_x, endPointA_y, newBranchLength, i -1);
+		double theta = Math.toRadians (i * goldenAngle);
+		double spiralRadius = c * Math.sqrt (i);
+		Color brown = new Color (210, 105, 30);
+
+		int x = (int) (spiralRadius * Math.cos (theta) + center_x);
+		int y = (int) (spiralRadius * Math.sin (theta) + center_y);
+
+		if (spiralRadius < 30 && spiralRadius % 2 != 1)
+		{
+
+		    g.setColor (Color.black);
+		    g.drawOval (x - seedRadius / 2, y - seedRadius / 2, seedRadius,
+			    seedRadius);
+		}
+		else if (spiralRadius > 30 && i % 10 == 0)
+		{
+		    AffineTransform old = g2.getTransform ();
+
+		    for (int n = 0 ; n <= 360 ; n += 45)
+		    {
+			g2.rotate (Math.toRadians (n), x, y);
+			g.setColor (Color.yellow);
+			g.fillOval (x - seedRadius / 2, y - seedRadius / 2, seedRadius,
+				seedRadius * 2);
+			g.setColor (brown);
+			g.drawOval (x - seedRadius / 2, y - seedRadius / 2, seedRadius,
+				seedRadius * 2);
+		    }
+		    g2.setTransform (old);
+		}
 	    }
 	}
 
-	public void drawTree (Graphics g, Graphics2D g2, int colorIndex,
-		int endPointA_x, int endPointA_y, int branchLength)
+	public void drawSeeds (Graphics g, int colorIndex, int width, int height, int radius, int spread)
 	{
+	    g.setColor (Color.black);
 
+	    for (int i = 0 ; i < spread ; i += 2)
+	    {
+		double theta = Math.toRadians (i * goldenAngle);
+		double spiralRadius = c * Math.sqrt (i);
+		Color brown = new Color (210, 105, 30);
+
+		int x = (int) (spiralRadius * Math.cos (theta) + width / 2);
+		int y = (int) (spiralRadius * Math.sin (theta) + height / 2);
+
+		if (spiralRadius < 100 && spiralRadius % 2 != 1)
+		{
+
+		    g.setColor (Color.black);
+		    g.drawOval (x - seedRadius / 2, y - seedRadius / 2, seedRadius,
+			    seedRadius);
+		}
+		else if (spiralRadius > 100)
+		{
+		    g.setColor (brown);
+		    g.drawOval (x - seedRadius / 2, y - seedRadius / 2, seedRadius,
+			    seedRadius);
+		}
+	    }
 	}
 
+	public void multipleFlowers (Graphics g, Graphics2D g2, int colorIndex, int center_x,
+		int center_y, int width, int height, int radius, int limit)
+	{
+	    drawSeeds (g, 0, width, height, radius, 3000);
 
+	    int newradius = (int) (radius / 1.2);
+
+	    for (int i = 45 ; i <= 360 ; i += 45)
+	    {
+		int new_x = (int) (width / 2 + 150 * Math.cos (Math.toRadians (i)));
+		int new_y = (int) (height / 2 + 150 * Math.sin (Math.toRadians (i)));
+
+		drawSeeds (g, g2, 0, new_x, new_y, width, height, 300);
+	    }
+
+	    int[] [] angleList = {
+		    {25, 270, 15},
+		    {15, 350, 10},
+		    {10, 400, 5}
+		};
+
+
+	    for (int h = 0 ; h < 3 ; h++)
+	    {
+		for (int e = angleList [h] [0] ; e <= 360 ; e += angleList [h] [0])
+		{
+		    int new_x = (int) (width / 2 + angleList [h] [1] * Math.cos (Math.toRadians (e)));
+		    int new_y = (int) (height / 2 + angleList [h] [1] * Math.sin (Math.toRadians (e)));
+
+		    drawFlower (g, g2, 0, new_x, new_y, angleList [h] [2]);
+		}
+	    }
+	}
+
+	public void drawFlower (Graphics g, Graphics2D g2, int colorIndex,
+		int center_x, int center_y, int radius)
+	{
+	    AffineTransform old = g2.getTransform ();
+
+	    for (int i = 0 ; i <= 360 ; i += 45)
+	    {
+		g2.rotate (Math.toRadians (i), center_x, center_y);
+		g.drawOval (center_x - radius / 2, center_y - radius / 2, radius,
+			radius * 2);
+	    }
+	    g2.setTransform (old);
+
+	    for (int i = 0 ; i <= 360 ; i += 15)
+	    {
+		g2.rotate (Math.toRadians (i), center_x, center_y);
+		g.drawOval (center_x - radius / 2, center_y - radius / 2, radius,
+			radius * limit);
+	    }
+	    g2.setTransform (old);
+	}
+	
     } // DrawingCanvas Class
 } // Fractal class

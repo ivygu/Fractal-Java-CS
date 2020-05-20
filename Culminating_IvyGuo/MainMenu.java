@@ -61,6 +61,7 @@ public class MainMenu extends JFrame implements ActionListener
 
 	// Set the frame's size and show the frame
 	frame.setSize (600, 500);
+	frame.setResizable(false);
 	frame.setVisible (true);
 
     } // Constructor
