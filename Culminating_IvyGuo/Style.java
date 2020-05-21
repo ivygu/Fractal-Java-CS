@@ -11,7 +11,7 @@ import javax.swing.*;
 
 public class Style
 {
-
+    //Declaration of Color objects with rgb values and font objects
     final static Color
 	FAINT = new Color (244, 245, 250),
 	LIGHT = new Color (179, 188, 245),
@@ -32,14 +32,15 @@ public class Style
 	AQUA = new Color (5, 255, 180),
 	LIME_GREEN = new Color (222, 255, 5),
 	WHITE = new Color (255, 255, 255);
-
+    
+    //Accessible array to call upon color packages
     final static Color[] [] colorSchemeList = {
 	    {AQUA, LIME_GREEN, WHITE},
 	    {AERO_BLUE, YALE_BLUE, MIDNIGHT_BLUE},
 	    {TULIP_PURPLE, SALSA_RED, FLAME_ORANGE}
 
 	};
-
+    //Accessible array to call upon font packages
     final static Font
 	TITLE_FONT = new Font ("Georgia", Font.PLAIN, 50),
 	HEADING_FONT = new Font ("Georgia", Font.PLAIN, 30),

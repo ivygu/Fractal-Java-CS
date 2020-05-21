@@ -1,17 +1,14 @@
 /*
- * Insert comments explaining the program here
- * x
- * x
+ * Ivy Guo - Flavours of Fractals / MAIN CLASS
+ * This class runs the main menu page
+ *
+ * FLAVOURS OF FRACTALS (not a game)
+ * The program takes the inputs of button clicks to survey questions to 
+ * paint fractal graphics. For information about how they are generated, 
+ * refer to "How it Works" page or internal documentation on Fractal Class
 */
 
 package Culminating_IvyGuo; //Package of classes used in this project
-
-import java.io.File;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-
 
 public class Main
 {
@@ -20,24 +17,6 @@ public class Main
 	//Creates new menu object
 	MainMenu mainMenu_page = new MainMenu ();
 
-	//playMusic ("audio.mp3");
     } // main method
-
-
-    /*public static void playMusic (String audioFilePath)
-    {
-	InputStream musicAudio;
-	try
-	{
-	    musicAudio = new FileInputStream (new File (audioFilePath));
-		AudioStream naudiostream = new AudioStream (musicAudio);
-	    AudioPlayer.player.start (naudiostream);
-	}
-	catch (Exception e)
-	{
-	}
-    }
-*/
-
 
 } // Main class

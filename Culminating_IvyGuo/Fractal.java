@@ -15,22 +15,23 @@ import java.awt.geom.AffineTransform;
 
 public class Fractal extends Canvas implements ActionListener
 {
+    //Declaration of variables
     JFrame frame;
     int colourSchemeIndex, complexityIndex, shapeIndex;
-    DrawingCanvas canvas; //displays fractal patterns
+    DrawingCanvas canvas; //canvas object used for paint method
 
     //Colours for fractals
     Color backgroundA, backgroundB, penColor;
 
-    //Phyllotaxis spirals from flower seeds create the golden angle
-    //This is the angle at which one seed is placed relative to another
-    //(variation)
+    //Flower growth constants
     double goldenAngle =
 	Math.toRadians (360 * Math.pow (((Math.sqrt (2) + 1) / 2), -2));
     double c = 1.5; //scale factor for each row of petals/seeds
     int spread = 2000; //Number of iterations of seeds/petals
     int seedRadius = 5;
     int limit;
+
+    //Button/panel for returning to main menu
     JButton returnHome;
     JPanel buttonPanel;
 
@@ -38,6 +39,8 @@ public class Fractal extends Canvas implements ActionListener
     public Fractal ()
     {
 	frame = new JFrame ("Flavours of Fractals - Fractal Build");
+
+	//define canvas object for paint method + add to canvas
 	canvas = new DrawingCanvas ();
 	frame.getContentPane ().add (canvas);
 
@@ -48,7 +51,7 @@ public class Fractal extends Canvas implements ActionListener
 	returnHome.setFont (Style.REGULAR_FONT);
 	returnHome.addActionListener (this);
 
-	//Create new panel for home button
+	//Create new panel for home button + add to frame
 	buttonPanel = new JPanel ();
 	buttonPanel.setBorder (new EmptyBorder
 		(new Insets (10, 10, 10, 10)));
@@ -56,28 +59,28 @@ public class Fractal extends Canvas implements ActionListener
 	buttonPanel.add (returnHome);
 	frame.getContentPane ().add (returnHome, BorderLayout.SOUTH);
 
-
 	// Set the frame's size and show the frame
 	frame.setSize (600, 500);
 	frame.setResizable (false);
 	frame.setVisible (true);
 
     } // Constructor
-    
+
+
     //Method handles on click for return home button
     public void actionPerformed (ActionEvent e)
     {
 	Object buttonObj = e.getSource ();
-	
+
 	//Recycles current frame to return back home
 	if (buttonObj == returnHome)
 	{
 	    frame.dispose ();
 	    MainMenu mainMenu_page = new MainMenu ();
-
 	}
     }
 
+    //Class handles all things graphics related
     class DrawingCanvas extends JPanel
     {
 	public DrawingCanvas ()
@@ -90,6 +93,7 @@ public class Fractal extends Canvas implements ActionListener
 	{
 	    super.paint (g);
 	    Graphics2D g2 = (Graphics2D) g; //for rotating graphics
+	    //Gets dimensions of the canvas
 	    int width = getWidth ();
 	    int height = getHeight ();
 
@@ -104,14 +108,13 @@ public class Fractal extends Canvas implements ActionListener
 	    //set gradient background based on color index
 	    backgroundA = Style.colorSchemeList [colourSchemeIndex] [0];
 	    backgroundB = Style.colorSchemeList [colourSchemeIndex] [1];
-
 	    GradientPaint colorToColor = new GradientPaint (0, 0, backgroundA,
 		    600, 600, backgroundB);
 	    g2.setPaint (colorToColor);
 	    g2.fillRect (0, 0, 600, 600);
 
 	    //sets properties of fractals to use in fractal building methods
-	    switch (complexityIndex)
+	    switch (complexityIndex) //sets limit for recursion
 	    {
 		case 0: //less stress == less crowded
 		    limit = 4;
@@ -121,21 +124,21 @@ public class Fractal extends Canvas implements ActionListener
 		    limit = 5;
 		    break;
 
-		case 2: //a lot of stress == bery crowed
+		case 2: //a lot of stress == very crowed
 		    limit = 6;
 		    break;
 	    }
 
-	    switch (shapeIndex)
+	    switch (shapeIndex) //sets shape of fractal
 	    {
-		case 0: //trees--> organic + literal, trees
-		    drawMultiFlower (g, g2, penColor, 300, 300, width, height,
-			    5, limit);
-		    break;
-
-		case 1: //wildfires--> organic, circles
+		case 0: //forest/nature --> organic, ovals/circles
 		    drawFancyCircle (g, penColor, 300, 220,
 			    200, limit);
+		    break;
+
+		case 1: //wildflowers--> organic, literal flowers
+		    drawMultiFlower (g, g2, penColor, 300, 300, width, height,
+			    5, limit);
 		    break;
 
 		case 2: //buildings --> more geometric, triangles
@@ -144,13 +147,16 @@ public class Fractal extends Canvas implements ActionListener
 		    break;
 	    }
 
-
-
 	} // paint method
 
 	//FRACTAL BUILDING METHODS-----------------------------------------
 
-	//Sierpinski Fractal ----------------------------------------------
+	//Sierpinski Fractal ---------------------------------------------
+
+	/* Inputs: Graphics for drawing the shapes, Color to set shape fills,
+	 * (x,y) points that define each corner of triangle
+	 * Outputs: 1 filled triangle
+	*/
 	public void drawTriangle (Graphics g, Color pen, int point1_x,
 		int point1_y, int point2_x, int point2_y, int point3_x,
 		int point3_y)
@@ -164,12 +170,19 @@ public class Fractal extends Canvas implements ActionListener
 	    g.fillPolygon (simpleTriangle);
 	}
 
+
+	/* Inputs: Graphics for drawing the shapes, Color to set shape fills,
+	 * (x,y) points that define each corner of triangle, limit iterations
+	 * Outputs: Scaled + filled triangles by calling itself recursively
+	*/
 	public void drawSierpinski (Graphics g, Color pen, int point1_x,
 		int point1_y, int point2_x, int point2_y, int point3_x,
 		int point3_y, int limit)
 	{
+
 	    if (limit > 0)
 	    {
+		//Scales down each point of triangle by calculating midpoints
 		int pointa_x = (point1_x + point2_x) / 2;
 		int pointa_y = (point1_y + point2_y) / 2;
 
@@ -179,6 +192,10 @@ public class Fractal extends Canvas implements ActionListener
 		int pointc_x = (point2_x + point3_x) / 2;
 		int pointc_y = (point2_y + point3_y) / 2;
 
+		/* Calls itself until limit is reached
+		 * Uses one vertex of orginal triangle and 2 calculating
+		 * midpoints to scale down triangle
+		*/
 		drawSierpinski (g, pen, point1_x, point1_y, pointa_x,
 			pointa_y, pointb_x, pointb_y, limit - 1);
 
@@ -190,6 +207,7 @@ public class Fractal extends Canvas implements ActionListener
 	    }
 	    else
 	    {
+		//Draws a triangle when limit is reached
 		drawTriangle (g, pen, point1_x, point1_y,
 			point2_x, point2_y, point3_x, point3_y);
 	    }
@@ -198,17 +216,30 @@ public class Fractal extends Canvas implements ActionListener
 	//------------------------------------------------------------------
 
 	//Circle Fractal ---------------------------------------------------
+
+	/* Inputs: Graphics for drawing the shapes, Color to set shape fills,
+	* (x,y) points that define orgin of circle, radius
+	* Outputs: 1 outlined circle
+	*/
 	public void drawCircle (Graphics g, Color pen, int center_x,
 		int center_y, int radius)
 	{
 	    g.setColor (pen);
+
+	    //Calculates left corner of "square" of orgin point to place oval
 	    g.drawOval (center_x - radius / 2, center_y - radius / 2, radius,
 		    radius);
 	}
 
+	/* Inputs: Graphics for drawing the shapes, Color to set shape fills,
+	 * (x,y) orgin points of circle, radius, limit for iterations
+	 * Outputs: Calls upon drawCircle method to output scaled middle, left,
+	 * right, top, and buttom circles
+	*/
 	public void drawFancyCircle (Graphics g, Color pen, int center_x,
 		int center_y, int radius, int limit)
 	{
+	    //Draws circle when limit is reached and inital circle
 	    drawCircle (g,
 		    pen,
 		    center_x,
@@ -221,7 +252,9 @@ public class Fractal extends Canvas implements ActionListener
 		//Halves radius to create smaller surrounding circles
 		int newRadius = radius / 2;
 
-		//Calculates new orgin points for 4 new circles
+		/* Calculates new orgin points for 4 new circles by scaling
+		* the radius down by a factor of 2
+		*/
 		int centerA_x = (center_x - radius / 2);
 		int centerB_x = (center_x + radius / 2);
 		int centerC_y = (center_y - radius / 2);
@@ -258,34 +291,42 @@ public class Fractal extends Canvas implements ActionListener
 	}
 	//------------------------------------------------------------------
 
-	//Sunflower "fractal" (not recursive)
-
-	//Method draws centre sunflower seeds
+	//Sunflower "fractal" (not recursive)-------------------------------
+	
+	/* Inputs: Graphics for drawing the shapes, 2DGraphics for rotations,
+	 * Color to set shape outlines,(x,y) points that define orgin of 
+	 * circle, width and height of canvas, radius of each seed
+	 * Outputs: one sunflower (petals and seeds)
+	*/
 	public void drawSeeds (Graphics g, Graphics2D g2, Color pen,
 		int center_x, int center_y, int width, int height, int radius)
 	{
-	    g.setColor (Color.white);
-
+	    //draws seeds for the flower
 	    for (int i = 0 ; i < spread ; i += 2)
 	    {
+		//calculates angle and radius 
 		double theta = Math.toRadians (i * goldenAngle);
 		double spiralRadius = c * Math.sqrt (i);
 		Color brown = new Color (210, 105, 30);
-
+		
+		//Converts and angle and radius into (x,y) points to plot
 		int x = (int) (spiralRadius * Math.cos (theta) + center_x);
 		int y = (int) (spiralRadius * Math.sin (theta) + center_y);
-
+		
+		//Draws seeds until a certain radius to keep centered
 		if (spiralRadius < 30 && spiralRadius % 2 != 1)
 		{
-
 		    g.setColor (Color.black);
 		    g.drawOval (x - seedRadius / 2, y - seedRadius / 2,
 			    seedRadius, seedRadius);
 		}
+		//Draws yellow petals around the seed radius 
 		else if (spiralRadius > 30 && i % 10 == 0)
 		{
+		    //Used for rotating points 
 		    AffineTransform old = g2.getTransform ();
-
+		    
+		    //draws outlined petals around the seed circumference
 		    for (int n = 0 ; n <= 360 ; n += 45)
 		    {
 			g2.rotate (Math.toRadians (n), x, y);
@@ -296,17 +337,26 @@ public class Fractal extends Canvas implements ActionListener
 			g.drawOval (x - seedRadius / 2, y - seedRadius / 2,
 				seedRadius, seedRadius * 2);
 		    }
+		    //stops all rotations
 		    g2.setTransform (old);
 		}
 	    }
 	}
-
-	//Overload method draws mini sunflowers (seeds and petals)
+	
+	/* Overloaded method to draw only center seeds (no petals)
+	 * Inputs: Graphics for drawing the shapes, 2DGraphics for rotations,
+	 * Color to set shape outlines, width and height of canvas, radius 
+	 * of each seed
+	 * Outputs: a bunch of seeds in the middle
+	*/
 	public void drawSeeds (Graphics g, Color pen, int width, int height,
 		int radius, int spread)
 	{
+	    //Set pen colour to black for the seeds
 	    g.setColor (Color.black);
-
+	    
+	    //Works the same as other drawSeeds method, except it does not
+	    //draw petals
 	    for (int i = 0 ; i < spread ; i += 2)
 	    {
 		double theta = Math.toRadians (i * goldenAngle);
@@ -318,7 +368,6 @@ public class Fractal extends Canvas implements ActionListener
 
 		if (spiralRadius < 100 && spiralRadius % 2 != 1)
 		{
-
 		    g.setColor (Color.black);
 		    g.drawOval (x - seedRadius / 2, y - seedRadius / 2,
 			    seedRadius, seedRadius);
@@ -332,15 +381,23 @@ public class Fractal extends Canvas implements ActionListener
 	    }
 	}
 
-	//Method draws outer layer of outlined flowers
+	/* Inputs: Graphics for drawing the shapes, 2DGraphics for rotations,
+	 * Color to set shape outlines,(x,y) points that define orgin of 
+	 * circle, width and height of canvas, radius of each seed, 
+	 * limit for how many circles of flowers are placed around the seeds
+	 * Outputs: multiple sunflowers, and outlined flowers
+	*/
 	public void drawMultiFlower (Graphics g, Graphics2D g2, Color pen,
 		int center_x, int center_y, int width, int height, int radius,
 		int limit)
 	{
+	    //draws the seeds of the sunflower by calling drawseeds method
 	    drawSeeds (g, pen, width, height, radius, 3000);
-
+	    
+	    //radius is called down by a factor of 1.2
 	    int newradius = (int) (radius / 1.2);
-
+	    
+	    //draws layer of smaller sunflowers outside center side
 	    for (int i = 45 ; i <= 360 ; i += 45)
 	    {
 		int new_x = (int) (width / 2 + 150 *
@@ -350,37 +407,47 @@ public class Fractal extends Canvas implements ActionListener
 
 		drawSeeds (g, g2, pen, new_x, new_y, width, height, 300);
 	    }
-
+	    
+	    //list of angles for next layers of flowers
 	    int[] [] angleList = {
 		    {15, 250, 20},
 		    {10, 300, 10},
 		    {5, 350, 5}
 		};
-	    
+
 	    //Layers of flower outlines depend on limit parameter
-	    for (int h = 0 ; h < (limit/2-1) ; h++)
+	    for (int h = 0 ; h < (limit / 2 - 1) ; h++)
 	    {
+		//Iterates for all of circumference of circle
 		for (int e = angleList [h] [0] ; e <= 360 ;
 			e += angleList [h] [0])
 		{
+		    //Calculates (x,y) points to draw flowers on
 		    int new_x = (int) (width / 2 + angleList [h] [1] *
 			    Math.cos (Math.toRadians (e)));
 		    int new_y = (int) (height / 2 + angleList [h] [1] *
 			    Math.sin (Math.toRadians (e)));
-
+			    
+		    //calls drawFlower method to draw flowers with (x,y) 
 		    drawFlower (g, g2, pen, new_x, new_y, angleList [h] [2]);
 		}
 	    }
 	}
 
-	//Method draws individual flower outline
+	/* Inputs: Graphics for drawing the shapes, 2DGraphics for rotations,
+	 * Color to set shape outlines,(x,y) points that define orgin of 
+	 * circle, width and height of canvas, radius of each seed
+	 * Outputs: one outlined flower 
+	*/
 	public void drawFlower (Graphics g, Graphics2D g2, Color pen,
 		int center_x, int center_y, int radius)
 	{
+	    //sets flower outline colour
 	    g.setColor (pen);
-
+	    
 	    AffineTransform old = g2.getTransform ();
-
+	    
+	    //draws inner petal layer around circumference 
 	    for (int i = 0 ; i <= 360 ; i += 45)
 	    {
 		g2.rotate (Math.toRadians (i), center_x, center_y);
@@ -388,7 +455,8 @@ public class Fractal extends Canvas implements ActionListener
 			radius, radius * 2);
 	    }
 	    g2.setTransform (old);
-
+	     
+	    //draws outer petal layer around circumference 
 	    for (int i = 0 ; i <= 360 ; i += 15)
 	    {
 		g2.rotate (Math.toRadians (i), center_x, center_y);

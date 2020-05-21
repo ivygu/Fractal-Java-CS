@@ -110,7 +110,6 @@ public class Instructions implements ActionListener
 	{
 	    frame.dispose ();
 	    MainMenu mainMenu_page = new MainMenu ();
-
 	}
     }
 } // Instructions class
