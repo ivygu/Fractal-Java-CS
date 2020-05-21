@@ -1,9 +1,14 @@
+/*
+ * Ivy Guo - Flavours of Fractals / STYLE PAGE
+ * This class stores all constant stylistic elements of the program including
+ * fonts and colours
+*/
+
 package Culminating_IvyGuo;
 
 import java.awt.*;
 import javax.swing.*;
 
-//Constant Stylistic Elements
 public class Style
 {
 
@@ -19,23 +24,25 @@ public class Style
 	AERO_BLUE = new Color (121, 190, 238),
 
 	//Warm Color Scheme (red)
-	SALSA_RED = new Color (199, 0, 57),
 	TULIP_PURPLE = new Color (81, 24, 76),
+	SALSA_RED = new Color (199, 0, 57),
 	FLAME_ORANGE = new Color (255, 87, 51),
 
 	//Bright Color Scheme
-	GOLDEN_YELLOW = new Color (255, 226, 5),
+	AQUA = new Color (5, 255, 180),
 	LIME_GREEN = new Color (222, 255, 5),
-	AQUA = new Color (5, 255, 180);
+	WHITE = new Color (255, 255, 255);
 
     final static Color[] [] colorSchemeList = {
-	    {SALSA_RED, TULIP_PURPLE, FLAME_ORANGE},
-	    {MIDNIGHT_BLUE, YALE_BLUE, AERO_BLUE},
-	    {GOLDEN_YELLOW, LIME_GREEN, AQUA}
+	    {AQUA, LIME_GREEN, WHITE},
+	    {AERO_BLUE, YALE_BLUE, MIDNIGHT_BLUE},
+	    {TULIP_PURPLE, SALSA_RED, FLAME_ORANGE}
+
 	};
 
     final static Font
 	TITLE_FONT = new Font ("Georgia", Font.PLAIN, 50),
 	HEADING_FONT = new Font ("Georgia", Font.PLAIN, 30),
-	REGULAR_FONT = new Font ("Georgia", Font.ITALIC, 20);
+	REGULAR_FONT = new Font ("Georgia", Font.ITALIC, 20),
+	READ_FONT = new Font ("Georgia", Font.PLAIN, 18);
 }

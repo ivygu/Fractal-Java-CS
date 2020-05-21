@@ -1,4 +1,8 @@
-//Main Menu
+/*
+ * Ivy Guo - Flavours of Fractals / MAIN MENU PAGE
+ * This class handles the onClick input from the user to redirect them to 
+ * their desired page 
+*/
 
 package Culminating_IvyGuo;
 
@@ -8,8 +12,9 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-public class MainMenu extends JFrame implements ActionListener
+public class MainMenu implements ActionListener
 {
+    //Declaration of variables
     private JFrame frame;
     private JLabel title, description;
     private JPanel contentPanel;
@@ -45,13 +50,12 @@ public class MainMenu extends JFrame implements ActionListener
 	contentPanel.add (title);
 	contentPanel.add (description);
 
-	//Add JButton Objects to GridLayout Panel/on click listeners
+	//Add JButton Objects to GridLayout Panel/onClick listeners
 	for (int i = 0 ; i < menuButtons.length ; i++)
 	{
 	    menuButtons [i].addActionListener (this);
 	    menuButtons [i].setBackground (Style.LIGHT);
 	    menuButtons [i].setForeground (Style.SEMI);
-	    //menuButtons [i].setBorderPainted(false);
 	    menuButtons [i].setFont (Style.REGULAR_FONT);
 	    contentPanel.add (menuButtons [i]);
 	}
@@ -66,11 +70,12 @@ public class MainMenu extends JFrame implements ActionListener
 
     } // Constructor
 
-
+    //Method handles button clicks of menu and redirects user to next page
     public void actionPerformed (ActionEvent e)
     {
 	Object buttonObj = e.getSource ();
-
+	
+	//Recycles current frame to replace with choosen activity
 	if (buttonObj == menuButtons [0])
 	{
 	    frame.dispose ();
@@ -79,7 +84,6 @@ public class MainMenu extends JFrame implements ActionListener
 	}
 	else if (buttonObj == menuButtons [1])
 	{
-	    //Recycles current frame to replace with choosen activity
 	    frame.dispose ();
 	    Instructions instructions_page = new Instructions ();
 

@@ -1,0 +1,35 @@
+<html>
+<H2>How it works</H2>
+Fractals are self-similar. Each part has similar characteristics to the whole. With 3 colour packages, 3 levels of complexity and 3 shapes, there are 27 different combinations of fractals to generate!
+
+<p>The triangle and circle fractals are recursive. The method calls upon itself to repeat and scale the next iteration until the limit is met.</p>
+
+<p>The flower fractal involves a variation of a special angle - the Golden Angle to produce neat spirals. This ratio allows us to replicate the phyllotaxis (arangements on a stem) in the program. Specfically, the seeds and petals of the sunflowers spiral in a circle around the orgin and are spaced out by a constant factor.</p>
+
+<p><u>Survey Question 1 // Colour psychology</u>
+<br>
+Colours have the ability to evoke emotion and feeling in human beings. Factors that influence meaning behind colours can be tied back to culture, enivroment, evolution.
+<br> 
+1) Vibrant Colours - Happiness, energized, delighted 
+<br> 
+2) Cool Colours - Calmness, Sadness, Cold  
+<br> 
+3) Warm Colours - Anger, Passion, Rage</P> 
+
+<p><u>Survey Question 2 // Complexity and Chaos:</u>
+<br>
+Higher stress levels can be associated with chaos, whereas lower stress levels can be associated with clarity and control. 
+<br><br>
+Since fractals by nature are self-similar to a degree, they are complex. Based stress levels answered, the limit of iterations is affected. The limit is increased for more stress to evoke a sense of busyness.  
+</p>
+
+<p><u>Survey Question 3 // Environment:</u>
+<br>
+Surroundings in nature typically take a fluid shape. They are not constrainted by strict edges. We call this more organic. By contrast, surrondings not found in nature, such as buildings and machines take a geometric shape. They are more predictable and more confined.
+<br><br>
+Flower Fractal - Organic
+<br>
+Circle Fractal - Organic/Geometric Mix
+<br>
+Triangle Fractal - Geometric</p>
+</html>

@@ -1,4 +1,10 @@
-// The "SurveyPages" class.
+/*
+ * Ivy Guo - Flavours of Fractals / SURVEY PAGES PAGE
+ * This class calls upon the SurveyLayout class to create survey pages.
+ * The user inputs reponses to the questions, which are passed to the
+ * Fractal class
+*/
+
 package Culminating_IvyGuo;
 
 import java.awt.event.ActionEvent;
@@ -7,9 +13,20 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-public class SurveyPages extends JFrame implements ActionListener
+public class SurveyPages implements ActionListener
 {
-    //Fields of Survey Layout
+    //Declaration of variables
+    static int[] userResponse = new int [3];
+    private JFrame frame;
+    private JButton backButton, nextButton;
+    private JPanel mainPanel, cardPanel, buttonPanel, card0, card1,
+	card2, card3;
+    private String welcomeInfo =
+	"<html>Following this page, you will be redirected to a survey." + 
+	"<p><br>We will be generating fractal designs with varying colours," +
+	" shapes and levels of complexity based on your responses.</p>" +
+	"<p><br>Have fun! :) </p></html>";
+
     private JToggleButton[] [] surveyButtons = {
 	    {
 	    new JToggleButton ("Joyful, Content, Delighted"),
@@ -33,32 +50,25 @@ public class SurveyPages extends JFrame implements ActionListener
 	    new JToggleButton
 	    ("In the city, surrounded by modern architecture.")
 	}
-
 	};
-
-    static int[] userResponse = new int [3];
-    private JFrame frame;
-    private JButton backButton, nextButton;
-    private JPanel mainPanel, cardPanel, buttonPanel, card0, card1,
-	card2, card3;
-    private ButtonGroup question1Group, question2Group, question3Group;
     public CardLayout cardLayout;
     private JPanel[] cardList = {
 	card1,
 	card2,
 	card3
 	};
-
+    //Groups survey buttons so only 1 can be selected per page at a time
+    private ButtonGroup question1Group, question2Group, question3Group;
     private ButtonGroup[] buttonGroup = {
 	question1Group = new ButtonGroup (),
 	question2Group = new ButtonGroup (),
 	question3Group = new ButtonGroup ()
 	};
-
     private int currentView = 1;
 
     public SurveyPages ()
     {
+	//creates frame object
 	frame = new JFrame ("Flavours of Fractals - Survey");
 
 	//Create new buttons objects for navigation
@@ -75,18 +85,17 @@ public class SurveyPages extends JFrame implements ActionListener
 
 	mainPanel.add (cardPanel, BorderLayout.CENTER);
 
+	//default introduction card stylized with html
 	card0 = SurveyLayout.makePanel ("Welcome to Flavours of Fractals"
-		, "<html>We will be generating designs based on your reponses"
-		+ " to this survey</html>");
+		,welcomeInfo);
 	cardPanel.add (card0, BorderLayout.NORTH);
 
-
 	//Create survey pages (JPanels) for cardlayout
-
 	for (int i = 0 ; i < 3 ; i++)
 	{
 	    cardList [i] = SurveyLayout.makePanel (i);
 
+	    //Creates survey buttons for each survey page and adds to jpanel
 	    for (int n = 0 ; n < 3 ; n++)
 	    {
 		//temp. local variable to pass to inner class
@@ -95,6 +104,7 @@ public class SurveyPages extends JFrame implements ActionListener
 			//Anonymous Listener Class for survey buttons
 			new ActionListener ()
 		{
+		    //Handles/stores reponses into user reponse array
 		    public void actionPerformed (ActionEvent e)
 		    {
 			userResponse [button] = buttonVal;
@@ -124,14 +134,18 @@ public class SurveyPages extends JFrame implements ActionListener
 	frame.getContentPane ().add (mainPanel);
 	// Set the frame's size and show the frame
 	frame.setSize (600, 500);
+	frame.setResizable (false);
 	frame.setVisible (true);
 
     } // Constructor
 
 
+    //Method handles back/next button and redirects to desired survey page
     public void actionPerformed (ActionEvent e)
     {
 	Object buttonObj = e.getSource ();
+
+	//updates page number and redirects to other page using cardlayout
 	if (buttonObj == backButton && currentView == 1)
 	{
 	    currentView = 0;
@@ -161,7 +175,8 @@ public class SurveyPages extends JFrame implements ActionListener
     } //On click button listener for next/back buttons
 
 
-    static int getSurveyAnswers(int a)
+    //Method gets reponses from survey for fractal parameters
+    static int getSurveyAnswers (int a)
     {
 	return userResponse [a];
 
